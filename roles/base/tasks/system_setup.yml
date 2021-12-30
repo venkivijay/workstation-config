@@ -31,7 +31,7 @@
     name: ansible-provision
     hour: "{{ ansible_provision_hour | default('*') }}"
     minute: "{{ ansible_cron_minute | default('*/30') }}"
-    command: /usr/local/bin/provision
+    job: /usr/local/bin/provision
     user: venkivijay
 
 - name: system setup | cron | schedule ansible cleanup at boot
@@ -39,7 +39,7 @@
   cron:
     name: ansible-cleanup
     special_time: reboot
-    command: /bin/rm -rf /home/venkivijay/.ansible
+    job: /bin/rm -rf /home/venkivijay/.ansible
     user: venkivijay
 
 # locale setup
