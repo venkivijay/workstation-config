@@ -22,7 +22,7 @@
 - name: system setup | cron | install cron
   tags: cron,system setup
   package:
-    name: {{ cron_package }}
+    name: "{{ cron_package }}"
     state: latest
 
 - name: system setup | cron | schedule ansible provision
