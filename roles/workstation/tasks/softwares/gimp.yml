@@ -2,9 +2,16 @@
   tags: packages,gimp,flatpak,workstation-packages
   become_user: venkivijay
   flatpak:
-    name: 
-      - org.gimp.GIMP
-      - org.gimp.GIMP.Manual
+    name: org.gimp.GIMP
+    method: user
+    state: present
+  when: gimp is defined and gimp == true
+
+- name: software | gimp | install manual
+  tags: packages,gimp,flatpak,workstation-packages
+  become_user: venkivijay
+  flatpak:
+    name: org.gimp.GIMP.Manual
     method: user
     state: present
   when: gimp is defined and gimp == true

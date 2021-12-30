@@ -24,7 +24,7 @@
   file:
     path: /var/log/ansible.log
     owner: venkivijay
-    group: ansible
+    group: venkivijay
     mode: 0664
     state: touch
   changed_when: False
