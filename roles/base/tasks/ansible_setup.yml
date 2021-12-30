@@ -12,7 +12,6 @@
       - "{{ python_psutil_package }}"
     state: present
 
-# Note: For Arch, the requirement is met by a dependency of systemd, only necessary on Debian-based
 - name: ansible setup | install acl package
   tags: ansible,ansible-setup,packages
   package:
