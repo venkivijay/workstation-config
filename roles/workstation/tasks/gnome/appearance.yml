@@ -81,4 +81,4 @@
   dconf:
     key: "/org/gnome/shell/extensions/pop-cosmic/clock-alignment"
     value: "'LEFT'"
-  when: ansible_distribution = 'Pop!_OS'
+  when: ansible_distribution == 'Pop!_OS'
