@@ -28,7 +28,7 @@
 - name: gnome | appearance | copy lock screen background file
   tags: gnome,gnome-lockscreen
   copy:
-    src: files/gnome/lockscreen.jpg
+    src: gnome/lockscreen.jpg
     dest: /usr/share/backgrounds/venkivijay-lockscreen.jpg
     owner: root
     group: root
