@@ -1,0 +1,84 @@
+# /org/gnome/desktop/background/
+
+- name: gnome | appearance | copy wallpaper file
+  tags: gnome,gnome-wallpaper
+  copy:
+    src: gnome/wallpaper.jpg
+    dest: /usr/share/backgrounds/venkivijay-wallpaper.jpg
+    owner: root
+    group: root
+    mode: 0644
+
+- name: gnome | appearance | set wallpaper
+  tags: gnome,gnome-wallpaper
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/background/picture-uri"
+    value: "'file:///usr/share/backgrounds/venkivijay-wallpaper.jpg'"
+
+- name: gnome | appearance | set wallpaper position
+  tags: gnome,gnome-wallpaper
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/background/picture-options"
+    value: "'centered'"
+
+# /org/gnome/desktop/screensaver/
+
+- name: gnome | appearance | copy lock screen background file
+  tags: gnome,gnome-lockscreen
+  copy:
+    src: files/gnome/lockscreen.jpg
+    dest: /usr/share/backgrounds/venkivijay-lockscreen.jpg
+    owner: root
+    group: root
+    mode: 0644
+
+- name: gnome | appearance | set lock screen background
+  tags: gnome,gnome-lockscreen
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/screensaver/picture-uri"
+    value: "'file:///usr/share/backgrounds/venkivijay-lockscreen.jpg'"
+
+- name: gnome | appearance | set lock screen background position
+  tags: gnome,gnome-lockscreen
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/screensaver/picture-options"
+    value: "'zoom'"
+
+# /org/gnome/desktop/interface/
+
+- name: gnome | appearance | set icon theme
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/interface/icon-theme"
+    value: "'Humanity-Dark'"
+
+- name: gnome | appearance | set clock-format
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/interface/clock-format"
+    value: "'24h'"
+
+- name: gnome | appearance | set clock-show-seconds
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/interface/clock-show-seconds"
+    value: "true"
+
+- name: gnome | appearance | set show-battery-percentage
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/interface/show-battery-percentage"
+    value: "true"
+
+# /org/gnome/shell/extensions/pop-cosmic/
+
+- name: gnome | appearance | set clock-alignment
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/shell/extensions/pop-cosmic/clock-alignment"
+    value: "'LEFT'"
+  when: ansible_distribution = 'Pop!_OS'

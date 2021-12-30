@@ -1,0 +1,9 @@
+# profile image
+- name: users | venkivijay | copy profile image
+  tags: dotfiles,dotfiles-venkivijay
+  copy:
+    src: users/venkivijay/profile.jpg
+    dest: /var/lib/AccountsService/icons/venkivijay
+    owner: root
+    group: root
+    mode: 0644

@@ -1,0 +1,10 @@
+[user]
+	name = venkivijay
+	email = venkivijay@hotmail.com
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[credential "https://github.com"]
+	helper = 
+	helper = ! auth git-credential

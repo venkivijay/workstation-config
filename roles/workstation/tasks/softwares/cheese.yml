@@ -1,0 +1,8 @@
+- name: software | cheese | install package
+  tags: packages,cheese,flatpak,workstation-packages
+  become_user: venkivijay
+  flatpak:
+    name: org.gnome.Cheese
+    method: user
+    state: present
+  when: cheese is defined and cheese == true

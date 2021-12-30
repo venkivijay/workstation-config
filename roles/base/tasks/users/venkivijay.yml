@@ -1,0 +1,60 @@
+- name: users | venkivijay | create group
+  tags: groups,venkivijay,users
+  group:
+    name: venkivijay
+    state: present
+
+- name: users | venkivijay | create user
+  tags: venkivijay,sudo,users
+  user:
+    name: venkivijay
+    group: venkivijay
+    groups: adm,ansible,{{ sudo_group }}
+    state: present
+    comment: "Venki Vijay"
+    password: "{{ venkivijay_passwd }}"
+    shell: /bin/bash
+
+- name: users | venkivijay | venkivijay | add sudoers file
+  tags: venkivijay,settings,simone,sudo,system,users
+  copy:
+    src: users/venkivijay/sudoers
+    dest: /etc/sudoers.d/venkivijay
+    owner: root
+    group: root
+    mode: 0440
+
+- name: users | venkivijay | create .ssh directory
+  tags: dotfiles,venkivijay,ssh,users
+  file:
+    path: "{{ item.dir }}"
+    state: directory
+    owner: venkivijay
+    group: venkivijay
+    mode: 0700
+  with_items:
+    - { dir: '/home/venkivijay/.ssh' }
+
+- name: users | venkivijay | add public key
+  tags: dotfiles,venkivijay,ssh,ssh-keys,users
+  authorized_key:
+    user: venkivijay
+    key: "{{ item }}"
+  with_file:
+    - users/venkivijay/ssh/venkivijay_id_ed25519.pub
+    - users/venkivijay/ssh/venkivijay_id_rsa.pub
+
+- name: users | venkivijay | copy dotfiles
+  tags: dotfiles,users,venkivijay,users,zsh
+  copy:
+    src: users/venkivijay/{{ item.src }}
+    dest: /home/venkivijay/{{ item.dest }}
+    owner: venkivijay
+    group: venkivijay
+    mode: 0600
+  with_items:
+    - { src: 'bash/.bash_aliases', dest: '.bash_aliases' }
+    - { src: 'bash/.bashrc', dest: '.bashrc' }
+    - { src: 'bash/.profile', dest: '.profile' }
+    - { src: 'git/.gitconfig', dest: '.gitconfig' }
+    - { src: 'zsh/.zshrc', dest: '.zshrc' }

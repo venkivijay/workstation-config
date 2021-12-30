@@ -1,0 +1,7 @@
+- name: software | virtualbox | install package
+  tags: virtualbox
+  package:
+    name: "virtualbox"
+  when:
+    - virtualbox is defined
+    - virtualbox == true

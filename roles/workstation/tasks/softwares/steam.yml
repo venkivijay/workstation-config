@@ -1,0 +1,8 @@
+- name: software | steam | install package
+  tags: packages,steam,flatpak,workstation-packages
+  become_user: venkivijay
+  flatpak:
+    name: com.valvesoftware.Steam
+    method: user
+    state: present
+  when: steam is defined and steam == true

@@ -1,0 +1,41 @@
+- name: gnome | peripherals | enable natural scrolling (mouse)
+  tags: gnome,mouse,peripherals
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/peripherals/mouse/natural-scroll"
+    value: "false"
+
+- name: gnome | peripherals | enable natural scrolling (touchpad)
+  tags: gnome,mouse,peripherals
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/natural-scroll"
+    value: "true"
+
+- name: gnome | peripherals | enable cursor acceleration (mouse)
+  tags: gnome,mouse,peripherals
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/peripherals/mouse/accel-profile"
+    value: "'adaptive'"
+
+- name: gnome | peripherals | increase cursor speed (mouse)
+  tags: gnome,mouse,peripherals
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/peripherals/mouse/speed"
+    value: "1.0"
+
+- name: gnome | peripherals | increase click-method (touchpad)
+  tags: gnome,mouse,peripherals
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/click-method"
+    value: "'areas'"
+
+- name: gnome | peripherals | increase two-finger-scrolling-enabled (touchpad)
+  tags: gnome,mouse,peripherals
+  become_user: venkivijay
+  dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/two-finger-scrolling-enabled"
+    value: "true"

@@ -1,0 +1,28 @@
+# disable apport
+- name: system setup | tweaks | disable apport in config on ubuntu-based hosts
+  tags: distro,distro-setup,apport,ubuntu
+  lineinfile:
+    dest: /etc/default/apport
+    regexp: "enabled="
+    line: "enabled=0"
+  failed_when: false
+  when: ansible_distribution in ["Pop!_OS", "Ubuntu"]
+
+- name: system setup | tweaks | disable and stop apport service on ubuntu-based hosts
+  tags: distro,distro-setup,apport,ubuntu
+  service:
+    name: apport
+    enabled: no
+    state: stopped
+  failed_when: false
+  when: ansible_distribution in ["Pop!_OS", "Ubuntu"]
+
+- name: system setup | system monitor | install system monitor packages
+  tags: packages,system,settings
+  package:
+    state: latest
+    name:
+      - gir1.2-gtop-2.0
+      - gir1.2-nm-1.0
+      - gir1.2-clutter-1.0
+      - gnome-system-monitor

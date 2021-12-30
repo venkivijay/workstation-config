@@ -1,0 +1,8 @@
+- name: software | postman | install package
+  tags: packages,postman,flatpak,workstation-packages
+  become_user: venkivijay
+  flatpak:
+    name: com.getpostman.Postman
+    method: user
+    state: present
+  when: postman is defined and postman == true

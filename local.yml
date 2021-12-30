@@ -1,0 +1,52 @@
+# Tasks to run before running rules
+- hosts: all
+  tags: always
+  become: true
+  pre_tasks:
+    - name: pre-run | update package cache (debian, etc)
+      tags: always
+      apt: update_cache=yes
+      changed_when: False
+      when: ansible_distribution in ["Debian", "Ubuntu", "Pop!_OS"]
+
+    - name: pre-run | update all installed packages (redhat, etc)
+      yum:
+        name: "*"
+        state: latest
+        update_cache: yes
+        update_only: yes
+      when: ansible_distribution in ["CentOS", "RedHat"]
+
+# Run roles
+- hosts: all
+  tags: base
+  become: true
+  roles:
+    - base
+
+# Cleanup
+- hosts: all
+  become: true
+  tasks:
+    - name: cleanup package cache (debian and ubuntu)
+      tags: always
+      apt:
+        autoclean: yes
+      changed_when: false
+      when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
+
+    - name: autoremove orphan packages (debian and ubuntu)
+      tags: always
+      apt:
+        autoremove: yes
+        purge: yes
+      when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
+
+    - name: Remove packages not needed anymore
+      yum:
+        autoremove: yes
+      when: ansible_distribution in ["CentOS", "RedHat"]
+
+    # - name: Reboot when packages were updated
+    #   reboot:
+    #   when: yum_update_status.changed

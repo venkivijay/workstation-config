@@ -1,0 +1,10 @@
+amd_microcode_package: amd64-microcode
+intel_microcode_package: intel-microcode
+cron_package: cron
+dconf_package: dconf-cli
+openssh_package: openssh-server
+openssh_service: ssh
+python_psutil_package: python3-psutil
+sudo_group: sudo
+microcode_intel_install: true
+microcode_amd_install: true

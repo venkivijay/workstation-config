@@ -1,0 +1,8 @@
+- name: software | transmission | install package
+  tags: packages,transmission,flatpak,workstation-packages
+  become_user: venkivijay
+  flatpak:
+    name: com.transmissionbt.Transmission
+    method: user
+    state: present
+  when: transmission is defined and transmission == true

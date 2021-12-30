@@ -1,0 +1,115 @@
+# clock setup
+- name: system setup | clock | install systemd-timesyncd
+  tags: ntp,system setup
+  package:
+    name: systemd-timesyncd
+    state: latest
+  when: ansible_distribution in ["Pop!_OS", "Ubuntu"]
+
+- name: system setup | clock | start and enable systemd-timesyncd
+  tags: ntp,system settings
+  service:
+    name: systemd-timesyncd
+    state: started
+    enabled: true
+
+- name: system setup | clock | set time zone
+  tags: ntp,timezone,system setup
+  timezone:
+    name: "Asia/Kolkata"
+
+# cron setup
+- name: system setup | cron | install cron
+  tags: cron,system setup
+  package:
+    name: {{ cron_package }}
+    state: latest
+
+- name: system setup | cron | schedule ansible provision
+  tags: cron,system setup
+  cron:
+    name: ansible-provision
+    hour: "{{ ansible_provision_hour | default('*') }}"
+    minute: "{{ ansible_cron_minute | default('*/30') }}"
+    command: /usr/local/bin/provision
+    user: venkivijay
+
+- name: system setup | cron | schedule ansible cleanup at boot
+  tags: cron,system setup
+  cron:
+    name: ansible-cleanup
+    special_time: reboot
+    command: /bin/rm -rf /home/venkivijay/.ansible
+    user: venkivijay
+
+# locale setup
+- name: system setup | locale | add en_US
+  tags: locale,system setup
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+
+- name: system setup | locale | set locale to en_US
+  tags: locale,system setup
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+  register: locale
+
+- name: system setup | locale | set en_US as default locale
+  tags: locale,system setup
+  command: localectl set-locale LANG=en_US.UTF-8
+  when: locale.changed
+
+# microcode setup
+- name: system setup | microcode | install package for amd
+  tags: amd,cpu,microcode,system setup
+  package:
+    name: "{{ amd_microcode_package }}"
+    state: latest
+  when:
+    - microcode_amd_install is defined
+    - microcode_amd_install == true
+
+- name: system setup | microcode | install package for intel
+  tags: cpu,intel,microcode,system setup
+  package:
+    name: "{{ intel_microcode_package }}"
+    state: latest
+  when:
+    - microcode_intel_install is defined
+    - microcode_intel_install == true
+
+# openssh setup
+- name: system setup | openssh | install or update daemon package
+  tags: openssh,ssh,system,settings
+  package:
+    name: "{{ openssh_package }}"
+    state: latest
+  notify: restart_sshd
+
+- name: system setup | openssh | enable daemon
+  tags: openssh,ssh,system,settings
+  service:
+    name: "{{ openssh_service }}"
+    enabled: yes
+    state: started
+
+- name: system setup | openssh | generate sshd_config file from template
+  tags: openssh,ssh,system,settings
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_sshd
+
+- name: system setup | openssh | copy issue.net
+  tags: openssh,ssh,system,settings
+  copy:
+    src: system_setup/openssh_issue.net
+    dest: /etc/issue.net
+    owner: root
+    group: root
+    mode: 0644
