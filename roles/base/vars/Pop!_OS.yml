@@ -8,3 +8,4 @@ python_psutil_package: python3-psutil
 sudo_group: sudo
 microcode_intel_install: true
 microcode_amd_install: true
+venkivijay_passwd: $6$Q8sW/dCDUWNfZEr8$w3SMFY36ypcvBDQJ49EVmDi6.77Kzzty4rHkCm5Tqb9yoMLxZqbnKhRcOB0tmDzT7PiHCUF3UgBxb4W4GW5SH/
