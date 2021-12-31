@@ -29,6 +29,7 @@
   - import_tasks: softwares/postman.yml
   - import_tasks: softwares/steam.yml
   - import_tasks: softwares/telegram.yml
+  - import_tasks: softwares/terminator.yml
   - import_tasks: softwares/transmission.yml
   - import_tasks: softwares/virtualbox.yml
 

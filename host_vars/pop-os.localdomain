@@ -9,5 +9,6 @@ minecraft: false
 postman: true
 steam: true
 telegram: true
+terminator: true
 transmission: true
 virtualbox: true

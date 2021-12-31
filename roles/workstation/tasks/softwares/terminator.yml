@@ -1,0 +1,7 @@
+- name: software | terminator | install package
+  tags: terminator
+  package:
+    name: "terminator"
+  when:
+    - terminator is defined
+    - terminator == true
