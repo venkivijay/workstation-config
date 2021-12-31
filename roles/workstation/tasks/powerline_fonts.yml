@@ -1,0 +1,6 @@
+- name: fonts | powerline font | install
+  tags: powerline,fonts,system setup
+  package:
+    name: "fonts-powerline"
+    state: latest
+  when: ansible_distribution in ["Pop!_OS", "Ubuntu", "Debian"]

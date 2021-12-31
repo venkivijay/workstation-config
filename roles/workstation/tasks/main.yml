@@ -3,35 +3,37 @@
   tags: always
 
 - block:
-  ## User configs
-  - import_tasks: users/venkivijay.yml
+    ## User configs
+    - import_tasks: users/venkivijay.yml
 
-## desktop environments
+    ## powerline fonts
+    # - import_tasks: powerline_fonts.yml
 
-  - include_tasks: gnome/appearance.yml
-    when: gnome is defined and gnome == true
+    ## gnome specific
+    - include_tasks: gnome/appearance.yml
+      when: gnome is defined and gnome == true
 
-  - include_tasks: gnome/peripherals.yml
-    when: gnome is defined and gnome == true
+    - include_tasks: gnome/peripherals.yml
+      when: gnome is defined and gnome == true
 
-  - include_tasks: gnome/terminal.yml
-    when: gnome is defined and gnome == true
+    - include_tasks: gnome/terminal.yml
+      when: gnome is defined and gnome == true
 
-  ## system setup
-  - import_tasks: system_setup.yml
+    ## system setup
+    - import_tasks: system_setup.yml
 
-  ## install software
-  - import_tasks: softwares/cheese.yml
-  - import_tasks: softwares/firefox.yml
-  - import_tasks: softwares/gimp.yml
-  - import_tasks: softwares/google_chrome.yml
-  - import_tasks: softwares/minecraft.yml
-  - import_tasks: softwares/postman.yml
-  - import_tasks: softwares/steam.yml
-  - import_tasks: softwares/telegram.yml
-  - import_tasks: softwares/terminator.yml
-  - import_tasks: softwares/transmission.yml
-  - import_tasks: softwares/virtualbox.yml
+    ## install software
+    - import_tasks: softwares/cheese.yml
+    - import_tasks: softwares/firefox.yml
+    - import_tasks: softwares/gimp.yml
+    - import_tasks: softwares/google_chrome.yml
+    - import_tasks: softwares/minecraft.yml
+    - import_tasks: softwares/postman.yml
+    - import_tasks: softwares/steam.yml
+    - import_tasks: softwares/telegram.yml
+    - import_tasks: softwares/terminator.yml
+    - import_tasks: softwares/transmission.yml
+    - import_tasks: softwares/virtualbox.yml
 
   rescue:
     - set_fact: task_failed=true
