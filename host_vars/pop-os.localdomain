@@ -1,0 +1,13 @@
+microcode_intel_install: true
+microcode_amd_install: true
+gnome: true
+cheese: true
+firefox: true
+gimp: true
+google_chrome: true
+minecraft: false
+postman: true
+steam: true
+telegram: true
+transmission: true
+virtualbox: true
