@@ -2,9 +2,16 @@
   tags: packages,telegram,flatpak,workstation-packages
   become_user: venkivijay
   flatpak:
-    name: 
-      - org.telegram.desktop
-      - org.telegram.desktop.webview
+    name: org.telegram.desktop
+    method: user
+    state: present
+  when: telegram is defined and telegram == true
+
+- name: software | telegram | install additional package
+  tags: packages,telegram,flatpak,workstation-packages
+  become_user: venkivijay
+  flatpak:
+    name: org.telegram.desktop.webview
     method: user
     state: present
   when: telegram is defined and telegram == true
