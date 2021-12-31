@@ -8,7 +8,6 @@
   tags: ansible,ansible-setup,packages
   package:
     name:
-      - "{{ dconf_package }}"
       - "{{ python_psutil_package }}"
     state: present
 

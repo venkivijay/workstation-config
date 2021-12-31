@@ -1,0 +1,8 @@
+amd_microcode_package: amd64-microcode
+intel_microcode_package: intel-microcode
+cron_package: cronie
+openssh_package: openssh-server
+openssh_service: sshd
+python_psutil_package: python3-psutil
+sudo_group: sudo
+venkivijay_passwd: $6$Q8sW/dCDUWNfZEr8$w3SMFY36ypcvBDQJ49EVmDi6.77Kzzty4rHkCm5Tqb9yoMLxZqbnKhRcOB0tmDzT7PiHCUF3UgBxb4W4GW5SH/

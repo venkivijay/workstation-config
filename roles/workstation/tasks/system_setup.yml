@@ -26,3 +26,12 @@
       - gir1.2-nm-1.0
       - gir1.2-clutter-1.0
       - gnome-system-monitor
+
+- name: system setup | misc | install other packages
+  tags: packages,system,settings
+  package:
+    state: latest
+    name:
+      - lm-sensors
+      - neofetch
+      - dconf-cli

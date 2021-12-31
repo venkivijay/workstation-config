@@ -6,6 +6,9 @@
     ## User configs
     - import_tasks: users/venkivijay.yml
 
+    ## system setup
+    - import_tasks: system_setup.yml
+    
     ## powerline fonts
     # - import_tasks: powerline_fonts.yml
 
@@ -19,8 +22,6 @@
     - include_tasks: gnome/terminal.yml
       when: gnome is defined and gnome == true
 
-    ## system setup
-    - import_tasks: system_setup.yml
 
     ## install software
     - import_tasks: softwares/cheese.yml

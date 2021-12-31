@@ -1,3 +1,25 @@
+- name: users | pretasks | ensure sudo group
+  tags: users,users-setup,sudo
+  group:
+    name: sudo
+    state: present
+
+- name: users | pretasks | ensure ansible user
+  tags: users,users-setup,ansible
+  user:
+    name: ansible
+    state: present
+    groups:
+      - sudo
+    create_home: yes
+    password_lock: yes
+
+- name: users | pretasks | ensure ansible group
+  tags: users,users-setup,ansible
+  group:
+    name: ansible
+    state: present
+
 - name: users | venkivijay | create group
   tags: groups,venkivijay,users
   group:

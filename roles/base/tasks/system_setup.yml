@@ -12,6 +12,7 @@
     name: systemd-timesyncd
     state: started
     enabled: true
+  when: ansible_distribution in ["Pop!_OS", "Ubuntu"]
 
 - name: system setup | clock | set time zone
   tags: ntp,timezone,system setup
@@ -43,23 +44,42 @@
     user: venkivijay
 
 # locale setup
-- name: system setup | locale | add en_US
-  tags: locale,system setup
-  locale_gen:
-    name: en_US.UTF-8
-    state: present
+- name: check if locale exists
+  shell: "locale -a | grep -i {{ config_system_locale | regex_replace('-', '') | quote }}"
+  register: found_locale
+  changed_when: no
+  failed_when: no
 
-- name: system setup | locale | set locale to en_US
-  tags: locale,system setup
-  locale_gen:
-    name: en_US.UTF-8
-    state: present
-  register: locale
+- name: create locale
+  command: "localedef -i {{ config_system_locale | regex_replace('(.*)\\..*', '\\1') | quote }} -f {{ config_system_locale | regex_replace('.*\\.(.*)', '\\1') | quote }} {{ config_system_locale | quote }}"
+  when: not ansible_check_mode and found_locale.rc != 0
 
-- name: system setup | locale | set en_US as default locale
-  tags: locale,system setup
-  command: localectl set-locale LANG=en_US.UTF-8
-  when: locale.changed
+- name: check if language exists
+  shell: "locale -a | grep -i {{ config_system_language | regex_replace('-', '') | quote }}"
+  register: found_language
+  changed_when: no
+  failed_when: no
+
+- name: create language
+  command: "localedef -i {{ config_system_language | regex_replace('(.*)\\..*', '\\1') | quote }} -f {{ config_system_language | regex_replace('.*\\.(.*)', '\\1') | quote }} {{ config_system_language | quote }}"
+  when: not ansible_check_mode and found_language.rc != 0
+
+- name: Get current locale and language configuration
+  command: localectl status
+  register: locale_status
+  changed_when: false
+
+- name: Parse 'LANG' from current locale and language configuration
+  set_fact:
+    locale_lang: "{{ locale_status.stdout | regex_search('LANG=([^\n]+)', '\\1') | first }}"
+
+- name: Parse 'LANGUAGE' from current locale and language configuration
+  set_fact:
+    locale_language: "{{ locale_status.stdout | regex_search('LANGUAGE=([^\n]+)', '\\1') | default([locale_lang], true) | first }}"
+
+- name: Configure locale to '{{ config_system_locale }}' and language to '{{ config_system_language }}'
+  command: localectl set-locale LANG={{ config_system_locale }} LANGUAGE={{ config_system_language }}
+  changed_when: locale_lang != config_system_locale or locale_language != config_system_language
 
 # microcode setup
 - name: system setup | microcode | install package for amd

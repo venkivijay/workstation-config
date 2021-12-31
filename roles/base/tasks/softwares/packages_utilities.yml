@@ -4,9 +4,7 @@
     state: latest
     name:
       - curl
-      - lm-sensors
       - lsof
-      - neofetch
       - rsync
       - wget
       - whois

@@ -1,0 +1,23 @@
+- name: system software | nodejs | install
+  become: true
+  package:
+    state: latest
+    name:
+      - nodejs
+      - npm
+  tags: software,nodejs
+
+- name: system software | nvm | install
+  become_user: venkivijay
+  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  tags: software,nodejs,nvm
+
+- name: system software | nvm | setup
+  become_user: venkivijay
+  shell: |
+    source /home/venkivijay/.zshrc
+    nvm install v14.18.2
+    nvm use v14.18.2
+  tags: software,nodejs,nvm
