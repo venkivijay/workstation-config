@@ -2,15 +2,15 @@
   tags: always
 
 - block:
+    # install software
+    - import_tasks: softwares/packages_utilities.yml
+
     # Make sure users exist on the system
     - import_tasks: users/venkivijay.yml
     - import_tasks: users/root.yml
 
     # Set up the ansible environment
     - import_tasks: ansible_setup.yml
-
-    # install software
-    - import_tasks: softwares/packages_utilities.yml
 
     # Perform remaining tasks:
     - import_tasks: system_setup.yml

@@ -33,7 +33,7 @@
     group: venkivijay
     mode: 0700
   with_items:
-    - { dir: '/home/venkivijay/.ssh' }
+    - { dir: "/home/venkivijay/.ssh" }
 
 - name: users | venkivijay | add public key
   tags: dotfiles,venkivijay,ssh,ssh-keys,users
@@ -45,7 +45,7 @@
     - users/venkivijay/ssh/venkivijay_id_rsa.pub
 
 - name: users | venkivijay | copy dotfiles
-  tags: dotfiles,users,venkivijay,users,zsh
+  tags: dotfiles,users,venkivijay,zsh
   copy:
     src: users/venkivijay/{{ item.src }}
     dest: /home/venkivijay/{{ item.dest }}
@@ -53,8 +53,24 @@
     group: venkivijay
     mode: 0600
   with_items:
-    - { src: 'bash/.bash_aliases', dest: '.bash_aliases' }
-    - { src: 'bash/.bashrc', dest: '.bashrc' }
-    - { src: 'bash/.profile', dest: '.profile' }
-    - { src: 'git/.gitconfig', dest: '.gitconfig' }
-    - { src: 'zsh/.zshrc', dest: '.zshrc' }
+    - { src: "bash/.bash_aliases", dest: ".bash_aliases" }
+    - { src: "bash/.bashrc", dest: ".bashrc" }
+    - { src: "bash/.profile", dest: ".profile" }
+    - { src: "git/.gitconfig", dest: ".gitconfig" }
+    - { src: "zsh/.zshrc", dest: ".zshrc" }
+
+- name: users | venkivijay | zsh shell switch
+  tags: users,venkivijay,zsh
+  shell: chsh -s $(which zsh) venkivijay
+
+- name: Check if oh-my-zsh is installed
+  tags: users,venkivijay,zsh,ohmyzsh
+  stat:
+    path: /home/venkivijay/.oh-my-zsh
+  register: oh_my_stats
+
+- name: users | venkivijay | ohmyzsh setup
+  tags: users,venkivijay,zsh,ohmyzsh
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  when: oh_my_stats.stat.exists == False
+  become_user: venkivijay
