@@ -1,2 +1,5 @@
 [server]
 server.venkivijay.com
+
+[workstation]
+pop-os.localdomain
