@@ -5,7 +5,9 @@
   pre_tasks:
     - name: pre-run | update package cache (debian, etc)
       tags: always
-      apt: update_cache=yes
+      apt:
+        update_cache: yes
+        upgrade: yes
       changed_when: False
       when: ansible_distribution in ["Debian", "Ubuntu", "Pop!_OS"]
 
