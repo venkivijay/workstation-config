@@ -5,4 +5,4 @@
     name: com.getpostman.Postman
     method: user
     state: present
-  when: postman is defined and postman == true
+  when: postman is defined and postman

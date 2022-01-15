@@ -5,4 +5,4 @@
     name: com.transmissionbt.Transmission
     method: user
     state: present
-  when: transmission is defined and transmission == true
+  when: transmission is defined and transmission

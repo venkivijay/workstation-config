@@ -1,0 +1,10 @@
+- name: server | include vars
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- block:
+    # Install Jenkins
+    - import_tasks: jenkins_setup.yml
+
+  rescue:
+    - name: base | rescue
+      set_fact: task_failed=true

@@ -3,5 +3,4 @@
   package:
     name: "virtualbox"
   when:
-    - virtualbox is defined
-    - virtualbox == true
+    - virtualbox is defined and virtualbox

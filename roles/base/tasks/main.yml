@@ -1,11 +1,15 @@
-- include_vars: "{{ ansible_distribution }}.yml"
+- name: base | include vars
+  include_vars: "{{ ansible_distribution }}.yml"
   tags: always
 
 - block:
-    # Install softwares
-    - import_tasks: softwares/packages_utilities.yml
+    # Install Prerequisite packages
+    - import_tasks: softwares/prerequisite_packages.yml
 
-    # Make sure users exist on the system
+    # Setup system
+    - import_tasks: system_setup.yml
+
+    # Create and setup users
     - import_tasks: users/venkivijay.yml
     - import_tasks: users/root.yml
 
@@ -15,8 +19,6 @@
     # Set up the ansible environment
     - import_tasks: ansible_setup.yml
 
-    # Perform remaining tasks:
-    - import_tasks: system_setup.yml
-
   rescue:
-    - set_fact: task_failed=true
+    - name: base | rescue
+      set_fact: task_failed=true

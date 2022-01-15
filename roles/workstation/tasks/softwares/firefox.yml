@@ -1,8 +1,9 @@
 - name: software | firefox | install package
-  tags: packages,firefox,flatpak,workstation-packages
+  tags: packages,firefox,workstation-packages
   become_user: venkivijay
-  flatpak:
-    name: org.mozilla.firefox
-    method: user
+  package:
+    name: firefox
     state: present
-  when: firefox is defined and firefox == true
+  become: true
+  become_method: sudo
+  when: firefox is defined and firefox

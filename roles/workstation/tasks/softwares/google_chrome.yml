@@ -12,8 +12,8 @@
 
 - name: software | google-chrome | update sources (repo added or changed)
   apt:
-    update_cache: yes
-  changed_when: False
+    update_cache: true
+  changed_when: false
   when: chrome_repo.changed
 
 - name: software | google-chrome | install package

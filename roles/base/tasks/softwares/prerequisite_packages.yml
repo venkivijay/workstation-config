@@ -1,7 +1,7 @@
-- name: system setup | utilities | install utility packages
+- name: system setup | prerequisite | install packages
   tags: packages,system,settings
   package:
-    state: latest
+    state: present
     name:
       - curl
       - lsof
@@ -9,3 +9,4 @@
       - wget
       - whois
       - zsh
+      - git

@@ -8,6 +8,7 @@
     owner: root
     group: root
     mode: 0644
+  when: not ansible_check_mode
 
 - name: gnome | appearance | set wallpaper
   tags: gnome,gnome-wallpaper
