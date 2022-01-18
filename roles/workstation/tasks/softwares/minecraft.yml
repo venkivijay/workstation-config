@@ -5,4 +5,4 @@
     name: com.mojang.Minecraft
     method: user
     state: present
-  when: minecraft is defined and minecraft == true
+  when: minecraft is defined and minecraft

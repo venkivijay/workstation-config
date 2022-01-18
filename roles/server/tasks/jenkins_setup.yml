@@ -1,0 +1,45 @@
+- name: jenkins | prerequisite
+  package:
+    name: "{{ java_package }}"
+    state: present
+
+- name: jenkins | add key
+  apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    state: present
+
+- name: jenkins | add repo
+  apt_repository:
+    repo: deb https://pkg.jenkins.io/debian-stable binary/
+    state: present
+    filename: jenkins
+    update_cache: true
+
+- name: jenkins | download deb
+  get_url:
+    url: "https://pkg.jenkins.io/debian/binary/jenkins_{{ jenkins_version }}_all.deb"
+    dest: "/tmp/jenkins_{{ jenkins_version }}_all.deb"
+  when: jenkins_version is defined and jenkins
+
+- name: jenkins | verify download
+  stat:
+    path: "/tmp/jenkins_{{ jenkins_version }}_all.deb"
+  register: specific_version
+  when: jenkins_version is defined and jenkins
+
+- name: jenkins | install
+  apt:
+    deb: "/tmp/jenkins_{{ jenkins_version }}_all.deb"
+    state: present
+  when: jenkins_version is defined and jenkins and specific_version.stat.exists
+
+- name: jenkins | ensure installation
+  apt:
+    name: jenkins
+    state: present
+
+- name: jenkins | start/enable service
+  service:
+    name: jenkins
+    enabled: true
+    state: started

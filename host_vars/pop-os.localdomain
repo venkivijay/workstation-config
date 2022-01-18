@@ -2,7 +2,7 @@ microcode_intel_install: true
 microcode_amd_install: true
 gnome: true
 cheese: true
-firefox: true
+firefox: false
 gimp: true
 google_chrome: true
 minecraft: false

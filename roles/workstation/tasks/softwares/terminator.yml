@@ -2,6 +2,14 @@
   tags: terminator
   package:
     name: "terminator"
-  when:
-    - terminator is defined
-    - terminator == true
+  when: terminator is defined and terminator
+
+- name: software | terminator | configure
+  tags: terminator
+  copy:
+    src: software/terminator_config
+    dest: /home/venkivijay/.config/terminator/config
+    owner: venkivijay
+    group: venkivijay
+    mode: 0664
+  when: terminator is defined and terminator

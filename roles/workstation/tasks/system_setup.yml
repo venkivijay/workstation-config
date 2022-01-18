@@ -12,7 +12,7 @@
   tags: distro,distro-setup,apport,ubuntu
   service:
     name: apport
-    enabled: no
+    enabled: false
     state: stopped
   failed_when: false
   when: ansible_distribution in ["Pop!_OS", "Ubuntu"]
@@ -20,7 +20,7 @@
 - name: system setup | system monitor | install system monitor packages
   tags: packages,system,settings
   package:
-    state: latest
+    state: present
     name:
       - gir1.2-gtop-2.0
       - gir1.2-nm-1.0
@@ -30,7 +30,7 @@
 - name: system setup | misc | install other packages
   tags: packages,system,settings
   package:
-    state: latest
+    state: present
     name:
       - lm-sensors
       - neofetch

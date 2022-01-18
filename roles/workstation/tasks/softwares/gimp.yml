@@ -5,7 +5,7 @@
     name: org.gimp.GIMP
     method: user
     state: present
-  when: gimp is defined and gimp == true
+  when: gimp is defined and gimp
 
 - name: software | gimp | install manual
   tags: packages,gimp,flatpak,workstation-packages
@@ -14,4 +14,4 @@
     name: org.gimp.GIMP.Manual
     method: user
     state: present
-  when: gimp is defined and gimp == true
+  when: gimp is defined and gimp

@@ -5,4 +5,4 @@
     name: org.gnome.Cheese
     method: user
     state: present
-  when: cheese is defined and cheese == true
+  when: cheese is defined and cheese

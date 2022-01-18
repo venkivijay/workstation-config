@@ -1,6 +1,25 @@
 - name: fonts | powerline font | install
   tags: powerline,fonts,system setup
   package:
-    name: "fonts-powerline"
-    state: latest
-  when: ansible_distribution in ["Pop!_OS", "Ubuntu", "Debian"]
+    name: "powerline"
+    state: present
+
+- name: fonts | powerline Inconsolata font | check if Inconsolata exists
+  tags: users,venkivijay,zsh,ohmyzsh
+  stat:
+    path: /home/venkivijay/.local/share/fonts/Inconsolata for Powerline.otf
+  register: font_check
+
+- name: fonts | powerline Inconsolata font | clone
+  tags: powerline,fonts,system setup
+  git:
+    repo: https://github.com/powerline/fonts.git
+    dest: /tmp/fonts
+    depth: 1
+    version: e80e3eb
+  when: not font_check.stat.exists
+
+- name: fonts | powerline Inconsolata font | install
+  tags: powerline,fonts,system setup
+  command: sh /tmp/fonts/install.sh 'Inconsolata for Powerline'
+  when: not font_check.stat.exists

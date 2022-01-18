@@ -1,5 +1,6 @@
 # Load distro-specific variables
-- include_vars: "{{ ansible_distribution }}.yml"
+- name: workstation | include vars
+  include_vars: "{{ ansible_distribution }}.yml"
   tags: always
 
 - block:
@@ -8,20 +9,16 @@
 
     ## system setup
     - import_tasks: system_setup.yml
-    
+
     ## powerline fonts
-    # - import_tasks: powerline_fonts.yml
+    - import_tasks: powerline_fonts.yml
 
     ## gnome specific
-    - include_tasks: gnome/appearance.yml
-      when: gnome is defined and gnome == true
-
-    - include_tasks: gnome/peripherals.yml
-      when: gnome is defined and gnome == true
-
-    - include_tasks: gnome/terminal.yml
-      when: gnome is defined and gnome == true
-
+    - block:
+        - import_tasks: gnome/appearance.yml
+        - import_tasks: gnome/peripherals.yml
+        - import_tasks: gnome/terminal.yml
+      when: gnome is defined and gnome
 
     ## install software
     - import_tasks: softwares/cheese.yml
@@ -37,4 +34,5 @@
     - import_tasks: softwares/virtualbox.yml
 
   rescue:
-    - set_fact: task_failed=true
+    - name: workstation | rescue
+      set_fact: task_failed=true

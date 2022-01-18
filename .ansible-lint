@@ -1,0 +1,3 @@
+warn_list:
+  - no-handler  # google-chrome handler
+  - yaml  # line-length

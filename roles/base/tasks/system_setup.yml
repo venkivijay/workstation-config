@@ -3,8 +3,7 @@
   tags: ntp,system setup
   package:
     name: systemd-timesyncd
-    state: latest
-  when: ansible_distribution in ["Pop!_OS", "Ubuntu"]
+    state: present
 
 - name: system setup | clock | start and enable systemd-timesyncd
   tags: ntp,system settings
@@ -24,96 +23,82 @@
   tags: cron,system setup
   package:
     name: "{{ cron_package }}"
-    state: latest
-
-- name: system setup | cron | schedule ansible provision
-  tags: cron,system setup
-  cron:
-    name: ansible-provision
-    hour: "{{ ansible_provision_hour | default('*') }}"
-    minute: "{{ ansible_cron_minute | default('*/30') }}"
-    job: /usr/local/bin/provision
-    user: venkivijay
-
-- name: system setup | cron | schedule ansible cleanup at boot
-  tags: cron,system setup
-  cron:
-    name: ansible-cleanup
-    special_time: reboot
-    job: /bin/rm -rf /home/venkivijay/.ansible
-    user: venkivijay
+    state: present
 
 # locale setup
-- name: check if locale exists
-  shell: "locale -a | grep -i {{ config_system_locale | regex_replace('-', '') | quote }}"
-  register: found_locale
-  changed_when: no
-  failed_when: no
+- block:
+    - name: system setup | locale | check if locale exists
+      shell: "locale -a | grep -i {{ config_system_locale | regex_replace('-', '') | quote }}"
+      register: found_locale
+      changed_when: false
+      failed_when: false
 
-- name: create locale
-  command: "localedef -i {{ config_system_locale | regex_replace('(.*)\\..*', '\\1') | quote }} -f {{ config_system_locale | regex_replace('.*\\.(.*)', '\\1') | quote }} {{ config_system_locale | quote }}"
-  when: not ansible_check_mode and found_locale.rc != 0
+    - name: system setup | locale | create locale
+      command: "localedef -i {{ config_system_locale | regex_replace('(.*)\\..*', '\\1') | quote }} -f {{ config_system_locale | regex_replace('.*\\.(.*)', '\\1') | quote }} {{ config_system_locale | quote }}"
+      when: found_locale.rc != 0
 
-- name: check if language exists
-  shell: "locale -a | grep -i {{ config_system_language | regex_replace('-', '') | quote }}"
-  register: found_language
-  changed_when: no
-  failed_when: no
+    - name: system setup | locale | check if language exists
+      shell: "locale -a | grep -i {{ config_system_language | regex_replace('-', '') | quote }}"
+      register: found_language
+      changed_when: false
+      failed_when: false
 
-- name: create language
-  command: "localedef -i {{ config_system_language | regex_replace('(.*)\\..*', '\\1') | quote }} -f {{ config_system_language | regex_replace('.*\\.(.*)', '\\1') | quote }} {{ config_system_language | quote }}"
-  when: not ansible_check_mode and found_language.rc != 0
+    - name: system setup | locale | create language
+      command: "localedef -i {{ config_system_language | regex_replace('(.*)\\..*', '\\1') | quote }} -f {{ config_system_language | regex_replace('.*\\.(.*)', '\\1') | quote }} {{ config_system_language | quote }}"
+      when: found_language.rc != 0
 
-- name: Get current locale and language configuration
-  command: localectl status
-  register: locale_status
-  changed_when: false
+    - name: system setup | locale | Get current locale
+      command: localectl status
+      register: locale_status
+      changed_when: false
 
-- name: Parse 'LANG' from current locale and language configuration
-  set_fact:
-    locale_lang: "{{ locale_status.stdout | regex_search('LANG=([^\n]+)', '\\1') | first }}"
+    - name: system setup | locale | Parse 'LANG'
+      set_fact:
+        locale_lang: "{{ locale_status.stdout | regex_search('LANG=([^\n]+)', '\\1') | first }}"
 
-- name: Parse 'LANGUAGE' from current locale and language configuration
-  set_fact:
-    locale_language: "{{ locale_status.stdout | regex_search('LANGUAGE=([^\n]+)', '\\1') | default([locale_lang], true) | first }}"
+    - name: system setup | locale | Parse 'LANGUAGE'
+      set_fact:
+        locale_language: "{{ locale_status.stdout | regex_search('LANGUAGE=([^\n]+)', '\\1') | default([locale_lang], true) | first }}"
 
-- name: Configure locale to '{{ config_system_locale }}' and language to '{{ config_system_language }}'
-  command: localectl set-locale LANG={{ config_system_locale }} LANGUAGE={{ config_system_language }}
-  changed_when: locale_lang != config_system_locale or locale_language != config_system_language
+    - name: system setup | locale | Set 'LANG' & 'LANGUAGE'
+      command: localectl set-locale LANG={{ config_system_locale }} LANGUAGE={{ config_system_language }}
+      changed_when: locale_lang != config_system_locale or locale_language != config_system_language
+  when: not ansible_check_mode
 
 # microcode setup
 - name: system setup | microcode | install package for amd
   tags: amd,cpu,microcode,system setup
   package:
     name: "{{ amd_microcode_package }}"
-    state: latest
+    state: present
   when:
     - microcode_amd_install is defined
-    - microcode_amd_install == true
+    - microcode_amd_install
 
 - name: system setup | microcode | install package for intel
   tags: cpu,intel,microcode,system setup
   package:
     name: "{{ intel_microcode_package }}"
-    state: latest
+    state: present
   when:
     - microcode_intel_install is defined
-    - microcode_intel_install == true
+    - microcode_intel_install
 
 # openssh setup
-- name: system setup | openssh | install or update daemon package
+- name: system setup | openssh | install / update daemon package
   tags: openssh,ssh,system,settings
   package:
     name: "{{ openssh_package }}"
-    state: latest
+    state: present
   notify: restart_sshd
 
 - name: system setup | openssh | enable daemon
   tags: openssh,ssh,system,settings
   service:
     name: "{{ openssh_service }}"
-    enabled: yes
+    enabled: true
     state: started
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: system setup | openssh | generate sshd_config file from template
   tags: openssh,ssh,system,settings
@@ -125,7 +110,7 @@
     mode: 0644
   notify: restart_sshd
 
-- name: system setup | openssh | copy issue.net
+- name: system setup | openssh | set issue.net
   tags: openssh,ssh,system,settings
   copy:
     src: system_setup/openssh_issue.net

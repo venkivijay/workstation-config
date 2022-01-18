@@ -1,0 +1,9 @@
+# Ignore ansible config
+ansible.cfg
+.ansible-lint
+
+# Ignore hosts inventory file
+hosts
+
+# Ignore host_vars directory
+host_vars
